@@ -69,10 +69,12 @@ template{
     gap: 25px;
     margin: 20px;
     /* background-color: #f7bbc0; */
-    z-index: -1;
+    /* z-index: -1; */
     padding: 20px;
-    background-image: url('./assets/img/Plaid.png');
+  
     background-size: cover;
+    width: 100%;
+    height: 100%;
 
 }
 main{
@@ -81,9 +83,7 @@ main{
   justify-content: center;
   align-items: center;
   /* background-color: #0d474d; */
-  z-index: -1;
   position: relative;
-  background-color: #181415;
 }
 
 </style>
