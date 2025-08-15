@@ -82,7 +82,7 @@ function openColorPicker() {
 
 .addBtn {
   font-size: 50px;
-  background-color: #f0f0f000;
+  background-color: #ffffffb8;
   border: none;
   cursor: pointer;
   border-radius: 50%;
@@ -101,7 +101,7 @@ function openColorPicker() {
   position: absolute;
   bottom: 80px;
   left: 0;
-  background-color: #7fc7ff59;
+  background-color: #7fc7ffc9;;
   backdrop-filter: blur(10px);
   width: 300px;
   padding: 20px;

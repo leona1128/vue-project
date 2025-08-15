@@ -72,7 +72,6 @@ template{
     /* z-index: -1; */
     padding: 20px;
   
-    background-size: cover;
     width: 100%;
     height: 100%;
 

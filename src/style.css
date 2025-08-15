@@ -8,7 +8,10 @@ body{
   color: #181415;
   height: 100vh;
   background-color: #181415;
-  padding: 20px;
+ margin: 20px;
+  background-image: url('./assets/img/cat.png');
+  background-size: cover;
+
 
 }
 #app{
@@ -17,7 +20,5 @@ body{
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-image: url('./assets/img/Plaid.png');
-  background-size: cover;
 
 }
