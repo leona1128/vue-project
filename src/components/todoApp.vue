@@ -59,8 +59,10 @@ const clostInput = () => {
   newTodo.value = '';
   selectedType.value = 'todo';
 }
+const addClasses = computed(() => ({
+  'add-with-bg': !showInput.value, 
+}))
 
-const addList = computed(() => (showInput.value ? '' : '➕'))
 
 function addTodo() {
   if (newTodo.value.trim() !== '') {
@@ -196,7 +198,7 @@ function selectType(type) {
     </div>
     
     <div class="newListIcon">
-      <div class="add" @click="toggleInput">{{ addList }}</div>
+      <div class="add" :class="addClasses" @click="toggleInput"> </div>
       <template v-if="showInput">
         <div class="close" @click="clostInput">X</div>
         <div class="choose">
@@ -421,8 +423,24 @@ label {
 
 .add {
   padding: 0 5px;
-  background-color: white;
-  border-radius: 50%;
+  /* background-color: white;
+  border-radius: 50%; */
+  /* background-image: url('../assets/img/bgadd.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px; */
+
+}
+.add-with-bg {
+  background-image: url('../assets/img/bgadd.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+
 }
 
 #addTodo {

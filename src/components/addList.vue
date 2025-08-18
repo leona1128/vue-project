@@ -81,7 +81,6 @@ function openColorPicker() {
 
 .addBtn {
   font-size: 50px;
-  background-color: #ffffffb8;
   border: none;
   cursor: pointer;
   border-radius: 50%;
@@ -90,10 +89,15 @@ function openColorPicker() {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-image: url('../assets/img/addlist.png');
+  background-size: cover;
+  opacity: 0.5;
 }
 
 .addBtn:hover {
-  background-color: #e8f1fb;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  transform: scale(1.1);
 }
 
 .addList_container {
