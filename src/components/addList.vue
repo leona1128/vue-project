@@ -5,14 +5,13 @@
       <div class="addList_header">
         <input
           v-model="title"
-         
           type="text" 
           placeholder="標題"
         />
         <button @click="closeAddList">❌</button>
       </div>
       
-      <div class="color-section">
+      <div class="color-section"   @click="openColorPicker">
         <label for="color">選擇顏色:</label>
         <div class="color-picker">
       
@@ -174,10 +173,11 @@ function openColorPicker() {
 
 .custom-color-btn:hover {
   transform: scale(1.1);
+  transition: transform 0.2s ease;
 }
 
 .submit-btn {
-  background-color: #6daff6;
+  background-color: #458ad5;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -185,9 +185,13 @@ function openColorPicker() {
   cursor: pointer;
   font-size: 14px;
   width: 100%;
+  
 }
 
 .submit-btn:hover {
-  background-color:  #6daff6;
+
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+
 }
 </style>

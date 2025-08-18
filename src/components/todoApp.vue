@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 
-// 需要定義 emit
 const emit = defineEmits(['delete'])
 
 const editingIndex = ref(null);
@@ -27,8 +26,13 @@ const todos = ref([]);
 const today = new Date().toISOString().split('T')[0];
 const date = ref(today);
 const showInput = ref(false);
+
+// 新增：選擇項目類型
+const selectedType = ref('todo'); // 'todo' 或 'message'
+
 const undone = computed(() => {
-  return todos.value.filter(todo => !todo.completed).length;
+  // 只計算待辦事項類型且未完成的項目
+  return todos.value.filter(item => item.type === 'todo' && !item.completed).length;
 });
 
 const newTodo = ref('');
@@ -46,23 +50,30 @@ onMounted(() => {
 
 const toggleInput = () => {
   showInput.value = !showInput.value;
+  // 重置選擇
+  selectedType.value = 'todo';
 }
 
 const clostInput = () => {
   showInput.value = false;
   newTodo.value = '';
+  selectedType.value = 'todo';
 }
 
 const addList = computed(() => (showInput.value ? '' : '➕'))
 
 function addTodo() {
   if (newTodo.value.trim() !== '') {
-    todos.value.push({
+    const newItem = {
       text: newTodo.value.trim(),
-      completed: false
-    });
+      type: selectedType.value, // 'todo' 或 'message'
+      completed: false // 留言類型不會用到這個屬性
+    };
+    
+    todos.value.push(newItem);
     newTodo.value = '';
     showInput.value = false;
+    selectedType.value = 'todo'; // 重置選擇
     storedTodos();
   }
 }
@@ -108,15 +119,18 @@ function locaDate() {
   localStorage.setItem(`date-${props.id}`, JSON.stringify(date.value));
 }
 
-// 新增刪除便利貼的函數
 function deleteThisNote() {
   emit('delete', props.id);
+}
+
+// 新增：切換項目類型
+function selectType(type) {
+  selectedType.value = type;
 }
 </script>
 
 <template>
   <div class="card" :style="{ backgroundColor: props.color }">
-    <!-- 修正：使用函數而不是 $emit -->
     <div class="delete" @click="deleteThisNote">✖</div>
     <div class="text">
       <div class="title">
@@ -140,10 +154,10 @@ function deleteThisNote() {
       </div>
       <div class="undone">未完成項目：{{ undone }}</div>
 
-      <!-- 代辦事項 -->
+      <!-- 代辦事項和留言列表 -->
       <ul>
-        <li v-for="(todo, index) in todos" :key="index" @dblclick="editTodo(index)">
-          <div>
+        <li v-for="(item, index) in todos" :key="index" @dblclick="editTodo(index)">
+          <div class="item-content">
             <template v-if="editingIndex === index">
               ✏️
               <input
@@ -155,20 +169,62 @@ function deleteThisNote() {
               /> 
             </template>
             <template v-else>
-              <input type="checkbox" :id="'todo-' + index" v-model="todo.completed" @change="storedTodos" />
-              <label :for="'todo-' + index">{{ todo.text }}</label>
+              <!-- 根據類型顯示不同內容 -->
+              <div v-if="item.type === 'todo'" class="todo-item">
+                <input 
+                  type="checkbox" 
+                  :id="'todo-' + index" 
+                  v-model="item.completed" 
+                  @change="storedTodos" 
+                />
+                <label :for="'todo-' + index" :class="{ completed: item.completed }">
+                  {{ item.text }}
+                </label>
+             
+              </div>
+
+              <div v-else class="message-item">
+    
+                <span class="message-icon">💬</span>
+                <span class="message-text">{{ item.text }}</span>
+              </div>
             </template>
           </div>
           <div @click="deleteTodo(index)">❌</div>
         </li>
       </ul>
-      <!-- 新增事項 -->
     </div>
+    
     <div class="newListIcon">
       <div class="add" @click="toggleInput">{{ addList }}</div>
       <template v-if="showInput">
         <div class="close" @click="clostInput">X</div>
-        <input type="text" v-model="newTodo" placeholder="請輸入代辦事項" @keyup.enter="addTodo" />
+        <div class="choose">
+          <div class="list_todo" @click="selectType('todo')">
+            <input 
+              type="radio" 
+              id="list" 
+              :checked="selectedType === 'todo'"
+              @change="selectType('todo')"
+            />
+            <span>待辦事項</span>
+          </div>
+          <div class="list_message" @click="selectType('message')">
+            <input 
+              type="radio" 
+              id="message" 
+              :checked="selectedType === 'message'"
+              @change="selectType('message')"
+            />
+            <span>留言</span>
+          </div>
+        </div>
+        <input 
+          type="text" 
+          v-model="newTodo" 
+          :placeholder="selectedType === 'todo' ? '請輸入待辦事項' : '請輸入留言內容'" 
+          @keyup.enter="addTodo" 
+        />
         <button id="addTodo" @click="addTodo">新增</button>
       </template>
     </div>
@@ -238,7 +294,7 @@ function deleteThisNote() {
 .delete {
   position: absolute;
   right: 5px;
-  top: 5px;
+  top: 0px;
   color: #9f3414;
   filter: drop-shadow(1px 1px 5px #d4d4d4);
   cursor: pointer;
@@ -282,10 +338,52 @@ li {
   border-bottom: 1px solid #ccc;
 }
 
+.item-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.message-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.message-icon {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.message-text {
+  color: #666;
+  /* font-style: italic; */
+
+  width: 222px;
+    max-height: 30px;
+    /* flex-wrap: wrap; */
+    display: flex;
+    overflow: scroll;
+    word-break: break-word;
+    font-size: clamp(0.75rem, 0.25rem + 4vw, 0.875rem);
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #999;
+}
+
 .edit-input {
   border: none;
   outline: none;
   background: transparent;
+  flex: 1;
 }
 
 .edit-input:focus {
@@ -299,6 +397,15 @@ input[type="checkbox"] {
 
 label {
   padding-right: 10px;
+    cursor: pointer;
+    flex: 1;
+    max-width: 230px;
+    max-height: 30px;
+    /* flex-wrap: wrap; */
+    display: flex;
+    overflow: scroll;
+    word-break: break-word;
+    font-size: clamp(0.875rem, 0.375rem + 4vw, 1rem);
 }
 
 .newListIcon {
@@ -306,7 +413,7 @@ label {
   align-items: center;
   position: absolute;
   bottom: 3px;
-  right: 8px;
+  right: 3px;
   font-size: 24px;
   cursor: pointer;
   gap: 3px;
@@ -314,6 +421,8 @@ label {
 
 .add {
   padding: 0 5px;
+  background-color: white;
+  border-radius: 50%;
 }
 
 #addTodo {
@@ -323,22 +432,55 @@ label {
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  margin-top: 5px;
 }
 
 .close {
   position: absolute;
-  bottom: 35px;
-  right: 0px;
+  bottom: 50px;
+  right: 15px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px;
+    color: #fff;
+    background-color: #434a4a;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    /* text-align: center; */
+    border-radius: 50%;
+    box-shadow: 1px 1px 5px 1px #d4d4d4;
+}
+
+.choose {
+  position: absolute;
+  bottom: 45px;
+  left: 0px;
+  display: flex;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.list_todo, .list_message {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   cursor: pointer;
-  font-size: 13px;
-  color: #fff;
-  background-color: #434a4a;
-  width: 17px;
-  height: 17px;
-  line-height: 18px;
-  text-align: center;
-  border-radius: 50%;
-  box-shadow: 1px 1px 5px 1px #d4d4d4;
+  padding: 5px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.list_todo:hover, .list_message:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.list_todo span, .list_message span {
+  font-size: 12px;
+  user-select: none;
 }
 
 .date-input {
