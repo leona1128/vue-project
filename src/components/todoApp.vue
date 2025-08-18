@@ -27,11 +27,11 @@ const today = new Date().toISOString().split('T')[0];
 const date = ref(today);
 const showInput = ref(false);
 
-// 新增：選擇項目類型
-const selectedType = ref('todo'); // 'todo' 或 'message'
+
+const selectedType = ref('todo'); 
 
 const undone = computed(() => {
-  // 只計算待辦事項類型且未完成的項目
+  
   return todos.value.filter(item => item.type === 'todo' && !item.completed).length;
 });
 
@@ -66,14 +66,14 @@ function addTodo() {
   if (newTodo.value.trim() !== '') {
     const newItem = {
       text: newTodo.value.trim(),
-      type: selectedType.value, // 'todo' 或 'message'
-      completed: false // 留言類型不會用到這個屬性
+      type: selectedType.value, 
+      completed: false 
     };
     
     todos.value.push(newItem);
     newTodo.value = '';
     showInput.value = false;
-    selectedType.value = 'todo'; // 重置選擇
+    selectedType.value = 'todo';
     storedTodos();
   }
 }
@@ -263,7 +263,7 @@ function selectType(type) {
   transform: translateX(-50%);
   width: 60px;
   height: 30px;
-  background-color: #6daff64f;
+  background-color:   #6daff6c2;
   box-shadow: 0px 0px 4px rgb(0 0 0 / 49%);
   z-index: 100;
 }
