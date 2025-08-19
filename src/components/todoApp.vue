@@ -365,17 +365,20 @@ li {
 
 .message-text {
   color: #666;
-  /* font-style: italic; */
-
-  width: 222px;
-    max-height: 30px;
-    /* flex-wrap: wrap; */
-    display: flex;
-    overflow: scroll;
-    word-break: break-word;
-    font-size: clamp(0.75rem, 0.25rem + 4vw, 0.875rem);
+  max-width: 222px;
+  max-height: 30px;
+  line-height: 14px;
+  display: flex;
+  word-break: break-word;
+  font-size: clamp(0.75rem, 0.25rem + 4vw, 0.875rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 和 Edge */
 }
-
+.message-text::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
 .completed {
   text-decoration: line-through;
   color: #999;
@@ -405,9 +408,12 @@ label {
     max-height: 30px;
     /* flex-wrap: wrap; */
     display: flex;
-    overflow: scroll;
     word-break: break-word;
     font-size: clamp(0.875rem, 0.375rem + 4vw, 1rem);
+    overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 和 Edge */
 }
 
 .newListIcon {
