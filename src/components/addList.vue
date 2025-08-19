@@ -13,7 +13,7 @@
       
       <div class="color-section"   @click="openColorPicker">
         <label for="color">選擇顏色:</label>
-        <div class="color-picker">
+        <div class="color-picker"  @click="openColorPicker">
       
           <input 
             type="color" 
@@ -43,6 +43,7 @@ const emit = defineEmits(['addlist', 'close'])
 const showAddList = ref(false)
 const newNoteColor = ref('#ffffff')
 const title = ref('')
+const colorInput = ref(null) // 添加這行！
 
 function addNote() {
   showAddList.value = true
@@ -65,10 +66,19 @@ function submitNote() {
     closeAddList()
   }
 }
-
-function openColorPicker() {
-  document.getElementById('color').click()
-  console.log('開啟顏色選擇')
+function openColorPicker(event) {
+  console.log('開啟顏色選擇', event.target)
+  
+  // 使用 ref 而不是 getElementById
+  if (colorInput.value) {
+    colorInput.value.click()
+  } else {
+    // 備用方案，使用 getElementById
+    const input = document.getElementById('color')
+    if (input) {
+      input.click()
+    }
+  }
 }
 </script>
 
@@ -159,14 +169,13 @@ function openColorPicker() {
   margin-bottom: 8px;
   font-size: 14px;
   color: #333;
-  pointer-events: none;
+
 
 }
 
 .color-picker {
   position: relative;
   display: inline-block;
-  pointer-events: none;
 }
 
 .hidden-colorInput {
