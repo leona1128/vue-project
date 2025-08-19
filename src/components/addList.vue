@@ -13,7 +13,7 @@
       
       <div class="color-section"   @click="openColorPicker">
         <label for="color">選擇顏色:</label>
-        <div class="color-picker"  @click="openColorPicker">
+        <div class="color-picker" >
       
           <input 
             type="color" 
@@ -24,7 +24,7 @@
           <!-- 自定義顏色顯示按鈕 -->
           <div 
             class="custom-color-btn" 
-            @click="openColorPicker"
+    
             :style="{ backgroundColor: newNoteColor }"
           >
           </div>
@@ -66,19 +66,10 @@ function submitNote() {
     closeAddList()
   }
 }
-function openColorPicker(event) {
-  console.log('開啟顏色選擇', event.target)
-  
-  // 使用 ref 而不是 getElementById
-  if (colorInput.value) {
-    colorInput.value.click()
-  } else {
-    // 備用方案，使用 getElementById
-    const input = document.getElementById('color')
-    if (input) {
-      input.click()
-    }
-  }
+function openColorPicker() {
+  console.log('開啟顏色選擇',)
+  document.getElementById('color').click()
+ 
 }
 </script>
 
@@ -169,6 +160,10 @@ function openColorPicker(event) {
   margin-bottom: 8px;
   font-size: 14px;
   color: #333;
+  display: block;
+position: fixed;
+z-index: 10000;
+width: 100%;
 
 
 }
@@ -176,6 +171,7 @@ function openColorPicker(event) {
 .color-picker {
   position: relative;
   display: inline-block;
+left: 78px;
 }
 
 .hidden-colorInput {
