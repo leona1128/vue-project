@@ -1,6 +1,6 @@
 <template>
   <div class="addList">
-    <button class='addBtn' type="button" @click="addNote">➕</button>
+    <button class='addBtn' type="button" @click="addNote"></button>
     <div class="addList_container" v-if="showAddList">
       <div class="addList_header">
         <input
@@ -68,6 +68,7 @@ function submitNote() {
 
 function openColorPicker() {
   document.getElementById('color').click()
+  console.log('開啟顏色選擇')
 }
 </script>
 
@@ -141,7 +142,16 @@ function openColorPicker() {
     display: flex;
     align-items: center;
     gap: 20px;
+    width: 100%;
+    cursor: pointer;
+  transition: background-color 0.2s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
 
+}
+.color-section:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  /* 測試用途 */
 }
 
 .color-section label {
@@ -149,12 +159,14 @@ function openColorPicker() {
   margin-bottom: 8px;
   font-size: 14px;
   color: #333;
+  pointer-events: none;
 
 }
 
 .color-picker {
   position: relative;
   display: inline-block;
+  pointer-events: none;
 }
 
 .hidden-colorInput {
