@@ -43,7 +43,7 @@ const emit = defineEmits(['addlist', 'close'])
 const showAddList = ref(false)
 const newNoteColor = ref('#ffffff')
 const title = ref('')
-const colorInput = ref(null) // 添加這行！
+const colorInput = ref(null) 
 
 function addNote() {
   showAddList.value = true

@@ -30,6 +30,8 @@ const showInput = ref(false);
 
 const selectedType = ref('todo'); 
 
+
+
 const undone = computed(() => {
   
   return todos.value.filter(item => item.type === 'todo' && !item.completed).length;
@@ -82,6 +84,7 @@ function addTodo() {
 
 function storedTodos() {
   localStorage.setItem(`todos-${props.id}`, JSON.stringify(todos.value));
+  console.log('已儲存待辦事項:', todos.value);
 }
 
 function deleteTodo(index) {
@@ -120,6 +123,7 @@ function saveDate() {
 function locaDate() {
   localStorage.setItem(`date-${props.id}`, JSON.stringify(date.value));
 }
+
 
 function deleteThisNote() {
   emit('delete', props.id);

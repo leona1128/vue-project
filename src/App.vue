@@ -34,6 +34,7 @@ function deleteNote(id) {
   localStorage.removeItem(`date-${id}`);
 }
 
+
 </script>
 
 <template>
